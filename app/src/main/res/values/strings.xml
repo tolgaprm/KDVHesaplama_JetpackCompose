@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">KDV Hesaplama</string>
+
+    <string name="kdv_dahil_kdv_haric">KDV dahil tutardan KDV uygulanmamış ilk fiyatı</string>
+    <string name="kdv_haric_kdv_dahil">KDV hariç fiyattan KDV dahil tutar hesaplama</string>
+    <string name="kdv_hesaplama">KDV HESAPLAMA</string>
+    <string name="islem">İşlem</string>
+    <string name="kdv_orani">KDV Oranı</string>
+    <string name="yuzde1">%1</string>
+    <string name="yuzde8">%8</string>
+    <string name="yuzde18">%18</string>
+    <string name="tutar">Tutar</string>
+    <string name="hesapla">Hesapla</string>
+    <string name="temizle">Temizle</string>
+
+    <string name="di_er">Diğer</string>
+    <string name="kdv_tutari">KDV Tutarı</string>
+    <string name="kdv_dahil_tutar">KDV Dahil Tutar:</string>
+    <string name="kdv_haric_tutar">KDV Hariç Tutar:</string>
+
+    <string name="kdv_dahil_tutar_s">KDV Dahil Tutar: %s </string>
+    <string name="kdv_haric_tutar_s">KDV Hariç Tutar: %s</string>
+    <string name="kdv_oranı_s">KDV Oranı (%s)</string>
+</resources>
