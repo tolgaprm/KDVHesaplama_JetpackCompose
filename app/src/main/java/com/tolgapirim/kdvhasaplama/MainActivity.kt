@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tolgapirim.kdvhasaplama.ui.theme.KDVHesaplamaTheme
+import java.text.NumberFormat
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +53,7 @@ fun App() {
         stringResource(id = R.string.di_er)
     )
 
-    val (selectedKdvOrani, onOptionSelectedKDVOrani) = remember {
+    var (selectedKdvOrani, onOptionSelectedKDVOrani) = remember {
         mutableStateOf(kdvOranRadioButtonText[2])
     }
 
@@ -61,12 +62,9 @@ fun App() {
         stringResource(id = R.string.kdv_haric_kdv_dahil)
     )
 
-    val (selectedIslem, onOptionSelectedIslem) = remember { mutableStateOf(islemRadioButtonText[0]) }
+    var (selectedIslem, onOptionSelectedIslem) = remember { mutableStateOf(islemRadioButtonText[0]) }
 
     var selectedKdvOran: Float? = null
-
-
-
 
 
     var girilenKdvOrani by remember { mutableStateOf("") }
@@ -76,6 +74,9 @@ fun App() {
     }
 
 
+    var sonuc by remember {
+        mutableStateOf(0f)
+    }
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
@@ -120,7 +121,6 @@ fun App() {
             )
 
 
-
             /*RadioButton diğer seçeneği seçiliyse
             textFiled oluştur
             yoksa oluşturma
@@ -151,10 +151,12 @@ fun App() {
         }
 
         // KDV Hariç Tutar veya Dahil Tutar
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 28.dp),
-        verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 28.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
 
             if (selectedIslem == stringResource(id = R.string.kdv_haric_kdv_dahil)) {
@@ -173,10 +175,11 @@ fun App() {
 
             Spacer(modifier = Modifier.width(10.dp))
 
-            OutlinedTextField(value = girilenTutar, onValueChange ={
-                girilenTutar = it
-            },
-                label = {Text(text = stringResource(id = R.string.tutar))},
+            OutlinedTextField(
+                value = girilenTutar, onValueChange = {
+                    girilenTutar = it
+                },
+                label = { Text(text = stringResource(id = R.string.tutar)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
@@ -187,11 +190,8 @@ fun App() {
             stringResource(id = R.string.yuzde1) -> 0.1f
             stringResource(id = R.string.yuzde8) -> 0.8f
             stringResource(id = R.string.yuzde18) -> 0.18f
-            else ->girilenKdvOrani.toFloatOrNull()
+            else -> girilenKdvOrani.toFloatOrNull()?.div(100)
         }
-
-
-
 
 
         val context = LocalContext.current
@@ -203,7 +203,14 @@ fun App() {
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Button(
-                onClick = { hesapla(context,selectedIslem,selectedKdvOran,girilenTutar.toFloatOrNull()) },
+                onClick = {
+                    sonuc = hesapla(
+                        context,
+                        selectedIslem,
+                        selectedKdvOran,
+                        girilenTutar.toFloatOrNull()
+                    )
+                },
             ) {
                 Text(
                     text = stringResource(id = R.string.hesapla),
@@ -211,7 +218,14 @@ fun App() {
                 )
             }
 
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = {
+               onOptionSelectedIslem(context.getString(R.string.kdv_dahil_kdv_haric))
+                onOptionSelectedKDVOrani(context.getString(R.string.yuzde18))
+                girilenKdvOrani = ""
+                girilenTutar =""
+                sonuc = 0f
+
+            }) {
                 Text(
                     text = stringResource(id = R.string.temizle),
                     style = MaterialTheme.typography.button.copy(fontSize = 18.sp)
@@ -220,29 +234,98 @@ fun App() {
 
             }
         }
-    }
-
-}
 
 
+        if (sonuc != 0f) {
+
+            val fiyat = NumberFormat.getCurrencyInstance().format(sonuc)
+            val tutar = NumberFormat.getCurrencyInstance().format(girilenTutar.toFloat())
+
+            if (selectedIslem == stringResource(id = R.string.kdv_haric_kdv_dahil)) {
+                SonucText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 48.dp),
+                    textId = R.string.kdv_haric_tutar_s,
+                    tutar
+                )
+
+                SonucText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp),
+                    textId = R.string.kdv_dahil_tutar_s,
+                    fiyat
+
+                )
+
+            }else{
+                SonucText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 48.dp),
+                    textId = R.string.kdv_haric_tutar_s,
+                    fiyat
+                )
+
+                SonucText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp),
+                    textId = R.string.kdv_dahil_tutar_s,
+                    tutar
+
+                )
+            }
 
 
-fun hesapla(context:Context,selectedIslem: String, selectedKdvOrani: Float?, tutar: Float?) {
-    if (selectedKdvOrani != null){
-        if (tutar != null){
-           if (selectedIslem ==  context.getString(R.string.kdv_haric_kdv_dahil)){
-               println("Kdv Hariç $selectedKdvOrani  $tutar")
-           }else{
-               println("Kdv Dahil $selectedKdvOrani $tutar")
-           }
-        }else{
-            Toast.makeText(context,"Lütfen tutar kısmını boş bırakmayınız!", Toast.LENGTH_SHORT).show()
         }
-    }else{
-        Toast.makeText(context,"Lütfen Kdv oranını boş bırakmayınız!", Toast.LENGTH_SHORT).show()
+
+
     }
+
 }
 
+@Composable
+fun SonucText(modifier: Modifier, textId: Int, fiyat: String?) {
+
+    fiyat?.let {
+        Text(
+            text = stringResource(id = textId, (it)),
+            style = MaterialTheme.typography.h6,
+            modifier = modifier,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+
+}
+
+
+fun hesapla(
+    context: Context,
+    selectedIslem: String,
+    selectedKdvOrani: Float?,
+    tutar: Float?
+): Float {
+    var sonuc = 0f
+    if (selectedKdvOrani != null) {
+        if (tutar != null) {
+            if (selectedIslem == context.getString(R.string.kdv_haric_kdv_dahil)) {
+                sonuc = tutar + (tutar * selectedKdvOrani)
+
+            } else {
+                sonuc = tutar / (1+ (selectedKdvOrani))
+            }
+        } else {
+            Toast.makeText(context, "Lütfen tutar kısmını boş bırakmayınız!", Toast.LENGTH_SHORT)
+                .show()
+        }
+    } else {
+        Toast.makeText(context, "Lütfen Kdv oranını boş bırakmayınız!", Toast.LENGTH_SHORT).show()
+    }
+
+    return sonuc
+}
 
 
 
@@ -334,12 +417,3 @@ fun DefaultPreview() {
     }
 }
 
-/*@Preview(showBackground = true)
-@Composable
-fun DefaultPreview2() {
-    KDVHesaplamaTheme {
-
-                App()
-
-    }
-}*/
