@@ -17,5 +17,5 @@
 ### An app that calculates taxes using Jetpack Compose
 
 <div>
-<img src="app/src/main/res/drawable/eng1.png">
+<img src="app/src/main/res/drawable/eng1.png" width="300">
 </div>
