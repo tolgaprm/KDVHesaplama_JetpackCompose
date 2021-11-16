@@ -53,7 +53,7 @@ fun App() {
         stringResource(id = R.string.di_er)
     )
 
-    var (selectedKdvOrani, onOptionSelectedKDVOrani) = remember {
+    val (selectedKdvOrani, onOptionSelectedKDVOrani) = remember {
         mutableStateOf(kdvOranRadioButtonText[2])
     }
 
@@ -62,7 +62,7 @@ fun App() {
         stringResource(id = R.string.kdv_haric_kdv_dahil)
     )
 
-    var (selectedIslem, onOptionSelectedIslem) = remember { mutableStateOf(islemRadioButtonText[0]) }
+    val (selectedIslem, onOptionSelectedIslem) = remember { mutableStateOf(islemRadioButtonText[0]) }
 
     var selectedKdvOran: Float? = null
 

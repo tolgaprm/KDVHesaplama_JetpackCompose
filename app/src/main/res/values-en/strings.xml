@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tax Calculation</string>
+    <string name="kdv_dahil_kdv_haric">First price without tax from the tax inclusive amount</string>
+    <string name="kdv_haric_kdv_dahil">Calculating the amount including tax from the price excluding tax</string>
+    <string name="kdv_hesaplama">Tax Calculation</string>
+    <string name="islem">Process</string>
+    <string name="kdv_orani">Tax Ratio</string>
+    <string name="yuzde1">%1</string>
+    <string name="yuzde8">%8</string>
+    <string name="yuzde18">%18</string>
+    <string name="tutar">Total</string>
+    <string name="hesapla">Calculate</string>
+    <string name="temizle">Clear</string>
+    <string name="di_er">Other</string>
+    <string name="kdv_tutari">Tax Amount</string>
+    <string name="kdv_dahil_tutar">Amount Including Tax</string>
+    <string name="kdv_haric_tutar">Amount Excludes Tax</string>
+    <string name="kdv_dahil_tutar_s">Amount Including Tax: %s</string>
+    <string name="kdv_haric_tutar_s">Amount Excludes Tax: %s</string>
+    <string name="kdv_oranı_s">Tax Ratio (%s)</string>
+</resources>
